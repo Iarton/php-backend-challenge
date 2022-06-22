@@ -2,8 +2,7 @@
 
 namespace Character\service;
 
-use GuzzleHttp\Client;
-
+use Character\repository\CharacterRepository;
 
 class CharacterService
 {
@@ -22,6 +21,9 @@ class CharacterService
             if ($quotes != null) {
                 $character['quotes'] = $quotes[0]['quotes'];
             }
+
+            $characterRepository = new CharacterRepository();
+            $characterRepository->createCharacter($character);
             $characterArray[] = $character;
         }
 
@@ -42,5 +44,13 @@ class CharacterService
         var_dump($data);
 
         return 'fim';
+    }
+
+    public function deleteAll()
+    {
+        $characterRepository = new CharacterRepository();
+        $characterRepository->deleteAll();
+
+        return 'deleted';
     }
 }
