@@ -36,4 +36,11 @@ class CharacterRepository
         $request = new RequestHelper();
         $request->sendRepositoryRequest($query, "DeleteAll");
     }
+
+    public function getAll(): void
+    {
+        $query = "{\n  Character {\n    Quotes {\n      text\n      id\n    }\n    id\n    image_url\n    name\n  }\n}\n";
+        $request = new RequestHelper();
+        $request->sendRepositoryRequest($query);
+    }
 }

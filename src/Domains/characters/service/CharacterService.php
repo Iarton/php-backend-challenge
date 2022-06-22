@@ -6,7 +6,7 @@ use Character\repository\CharacterRepository;
 
 class CharacterService
 {
-    public function create()
+    public function create(): string
     {
         $client = new \GuzzleHttp\Client();
         $response =  $client->get('https://thronesapi.com/api/v2/Characters');
@@ -21,7 +21,7 @@ class CharacterService
             $this->addQuote($id, $slug);
         }
 
-        return 'fim';
+        return 'created';
     }
 
     public function addQuote(int $characterId, string $name): void
@@ -42,21 +42,15 @@ class CharacterService
 
     public function getAll()
     {
-        $client = new \GuzzleHttp\Client();
-        $response =  $client->post('https://backend-challenge.hasura.app/v1/graphql', [
-            'headers' => [
-                'x-hasura-admin-secret' => 'uALQXDLUu4D9BC8jAfXgDBWm1PMpbp0pl5SQs4chhz2GG14gAVx5bfMs4I553keV',
-                'content-type' => 'application/json'
-            ],
-            'json' => ['query' => "{\n  Character {\n    Quotes {\n      text\n      id\n    }\n    id\n    image_url\n    name\n  }\n}\n"]
-        ]);
-        $data = json_decode($response->getBody(), true);
-        var_dump($data);
+
+        $characterRepository = new CharacterRepository();
+        $characterRepository->getAll();
+
 
         return 'fim';
     }
 
-    public function deleteAll()
+    public function deleteAll(): string
     {
         $characterRepository = new CharacterRepository();
         $characterRepository->deleteAll();
