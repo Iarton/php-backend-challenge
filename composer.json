@@ -11,7 +11,8 @@
     "autoload": {
         "psr-4": {
             "TickX\\Challenge\\": "src/code/",
-            "Character\\": "src/Domains/characters/"
+            "Character\\": "src/Domains/characters/",
+            "Helper\\": "src/helper/"
         }
     },
     "prefer-stable": true,
