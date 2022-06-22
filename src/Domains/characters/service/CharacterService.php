@@ -6,6 +6,7 @@ use Character\repository\CharacterRepository;
 use Helper\RequestHelper;
 
 include_once  __DIR__ . '/../../../helper/RequestHelper.php';
+include_once  __DIR__ . '/../../../constant/urlConstants.php';
 class CharacterService
 {
     private $characterRepository;
@@ -19,25 +20,22 @@ class CharacterService
 
     public function create(): string
     {
-        $url = 'https://thronesapi.com/api/v2/Characters';
-        $data = $this->request->sendGetRequest($url);
+        $data = $this->request->sendGetRequest(CHARACTERS_URL);
 
-        foreach ($data as $item) {
-            $character['name'] = $item['fullName'];
-            $character['image_url'] = $item['imageUrl'];
-            $slug = $item['firstName'] != "" ? strtolower($item['firstName']) : strtolower($item['lastName']);
-            $id = $this->characterRepository->createCharacter($character);
+        foreach ($data as $character) {
+            $newCharacter['name'] = $character['fullName'];
+            $newCharacter['image_url'] = $character['imageUrl'];
+            $slug = $character['firstName'] != "" ? strtolower($character['firstName']) : strtolower($character['lastName']);
+            $id = $this->characterRepository->createCharacter($newCharacter);
             $this->addQuote($id, $slug);
         }
 
         return 'created';
     }
 
-    public function addQuote(int $characterId, string $name): void
+    private function addQuote(int $characterId, string $name): void
     {
-
-        $url = 'https://api.gameofthronesquotes.xyz/v1/character/' . $name;
-        $quotes = $this->request->sendGetRequest($url);
+        $quotes = $this->request->sendGetRequest(QUOTES_URL . $name);
         if ($quotes != null) {
             $quotesList = $quotes[0]['quotes'];
             foreach ($quotesList as $quote) {
