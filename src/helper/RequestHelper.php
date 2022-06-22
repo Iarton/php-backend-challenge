@@ -11,9 +11,9 @@ class RequestHelper
             $json[] = ["operationName" => $operation];
         }
         $client = new \GuzzleHttp\Client();
-        $response =  $client->post('https://backend-challenge.hasura.app/v1/graphql', [
+        $response =  $client->post($_ENV['API_URL'], [
             'headers' => [
-                'x-hasura-admin-secret' => 'uALQXDLUu4D9BC8jAfXgDBWm1PMpbp0pl5SQs4chhz2GG14gAVx5bfMs4I553keV',
+                'x-hasura-admin-secret' => $_ENV['API_SECRET'],
                 'content-type' => 'application/json'
             ],
             'json' => $json
