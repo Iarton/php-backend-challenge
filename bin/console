@@ -6,10 +6,12 @@ require __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\Console\Application;
 use TickX\Challenge\Command\RunCommand;
 use TickX\Challenge\Command\createCharactersCommand;
+use TickX\Challenge\Command\getAllCharactersCommand;
 
 $application = new Application();
 
 $application->add(new RunCommand());
 $application->add(new createCharactersCommand());
+$application->add(new getAllCharactersCommand());
 
 $application->run();

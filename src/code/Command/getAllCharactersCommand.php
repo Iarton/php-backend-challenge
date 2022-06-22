@@ -9,18 +9,18 @@ use Character\service\CharacterService;
 
 include_once  __DIR__ . '/../../Domains/characters/service/CharacterService.php';
 
-class createCharactersCommand extends Command
+class getAllCharactersCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('create');
+        $this->setName('getAll');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
         $characterService = new CharacterService();
-        $teste = $characterService->create();
+        $teste = $characterService->getAll();
 
         $output->writeln($teste);
 
