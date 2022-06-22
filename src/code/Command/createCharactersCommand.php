@@ -20,9 +20,7 @@ class createCharactersCommand extends Command
     {
 
         $characterService = new CharacterService();
-        $teste = $characterService->create();
-
-        $output->writeln($teste);
+        $output->writeln($characterService->create());
 
         return 0;
     }

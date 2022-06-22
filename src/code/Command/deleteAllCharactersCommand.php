@@ -20,9 +20,9 @@ class deleteAllCharactersCommand extends Command
     {
 
         $characterService = new CharacterService();
-        $teste = $characterService->deleteAll();
+        $characterService->deleteAll();
 
-        $output->writeln($teste);
+        $output->writeln('deleted');
 
         return 0;
     }

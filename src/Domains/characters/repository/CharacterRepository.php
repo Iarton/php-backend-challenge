@@ -15,17 +15,19 @@ class CharacterRepository
         $this->request = new RequestHelper();
     }
 
-    public function createCharacter($character): int
+    public function createCharacter($character): ?int
     {
-
         $query = "mutation CreateCharacter {\n  insert_Character(objects:" .
             "{name: \"" . $character['name'] . "\"" .
             "image_url: \"" . $character['image_url'] .
             "\"}) {\n    returning {\n      id\n    }\n  }\n}";
 
         $data = $this->request->sendRepositoryRequest($query, "CreateCharacter");
-
-        return  $data['data']['insert_Character']['returning'][0]['id'];
+        if (array_key_exists('data', $data)) {
+            return $data['data']['insert_Character']['returning'][0]['id'];
+        }
+        sleep(5);
+        return null;
     }
 
     public function addQuote(int $characterId, string $quote): void
@@ -41,9 +43,9 @@ class CharacterRepository
         $this->request->sendRepositoryRequest($query, "DeleteAll");
     }
 
-    public function getAll(): void
+    public function getAll(): array
     {
         $query = "{\n  Character {\n    Quotes {\n      text\n      id\n    }\n    id\n    image_url\n    name\n  }\n}\n";
-        $this->request->sendRepositoryRequest($query);
+        return $this->request->sendRepositoryRequest($query);
     }
 }

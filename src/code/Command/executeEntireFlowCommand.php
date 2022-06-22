@@ -9,17 +9,21 @@ use Character\service\CharacterService;
 
 include_once  __DIR__ . '/../../Domains/characters/service/CharacterService.php';
 
-class getAllCharactersCommand extends Command
+class executeEntireFlowCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('getAll');
+        $this->setName('executeFlow');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
         $characterService = new CharacterService();
+
+        $characterService->create();
+        echo "created\n";
+
         $allCharacters = $characterService->getAll();
         foreach ($allCharacters['data']['Character'] as $character) {
             echo "\nName: " . $character['name'];
@@ -31,7 +35,11 @@ class getAllCharactersCommand extends Command
             }
             echo "\n";
         };
-        $output->writeln("\nEnd\n");
+
+        $characterService->deleteAll();
+        echo "deleted\n";
+
+        $output->writeln('flow completed');
 
         return 0;
     }

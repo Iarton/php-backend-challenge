@@ -27,7 +27,9 @@ class CharacterService
             $newCharacter['image_url'] = $character['imageUrl'];
             $slug = $character['firstName'] != "" ? strtolower($character['firstName']) : strtolower($character['lastName']);
             $id = $this->characterRepository->createCharacter($newCharacter);
-            $this->addQuote($id, $slug);
+            if ($id != null) {
+                $this->addQuote($id, $slug);
+            }
         }
 
         return 'created';
@@ -45,11 +47,9 @@ class CharacterService
     }
 
 
-    public function getAll(): string
+    public function getAll(): array
     {
-        $this->characterRepository->getAll();
-
-        return 'all';
+        return $this->characterRepository->getAll();
     }
 
     public function deleteAll(): string

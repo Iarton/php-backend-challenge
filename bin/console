@@ -9,11 +9,13 @@ use Symfony\Component\Console\Application;
 use TickX\Challenge\Command\createCharactersCommand;
 use TickX\Challenge\Command\getAllCharactersCommand;
 use TickX\Challenge\Command\deleteAllCharactersCommand;
+use TickX\Challenge\Command\executeEntireFlowCommand;
 
 $application = new Application();
 
 $application->add(new createCharactersCommand());
 $application->add(new getAllCharactersCommand());
 $application->add(new deleteAllCharactersCommand());
+$application->add(new executeEntireFlowCommand());
 
 $application->run();
