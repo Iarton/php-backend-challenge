@@ -8,7 +8,6 @@ class CharacterService
 {
     public function create()
     {
-        $characterArray = [];
         $client = new \GuzzleHttp\Client();
         $response =  $client->get('https://thronesapi.com/api/v2/Characters');
         $data = json_decode($response->getBody(), true);
@@ -16,19 +15,30 @@ class CharacterService
             $character['name'] = $item['fullName'];
             $character['image_url'] = $item['imageUrl'];
             $slug = $item['firstName'] != "" ? strtolower($item['firstName']) : strtolower($item['lastName']);
-            $quotesResponse =  $client->get('https://api.gameofthronesquotes.xyz/v1/character/' . $slug);
-            $quotes = json_decode($quotesResponse->getBody(), true);
-            if ($quotes != null) {
-                $character['quotes'] = $quotes[0]['quotes'];
-            }
 
             $characterRepository = new CharacterRepository();
-            $characterRepository->createCharacter($character);
-            $characterArray[] = $character;
+            $id = $characterRepository->createCharacter($character);
+            $this->addQuote($id, $slug);
         }
 
         return 'fim';
     }
+
+    public function addQuote(int $characterId, string $name): void
+    {
+
+        $client = new \GuzzleHttp\Client();
+        $quotesResponse =  $client->get('https://api.gameofthronesquotes.xyz/v1/character/' . $name);
+        $quotes = json_decode($quotesResponse->getBody(), true);
+        if ($quotes != null) {
+            $quotesList = $quotes[0]['quotes'];
+            foreach ($quotesList as $quote) {
+                $characterRepository = new CharacterRepository();
+                $characterRepository->addQuote($characterId, $quote);
+            }
+        }
+    }
+
 
     public function getAll()
     {
