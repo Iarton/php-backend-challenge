@@ -2,14 +2,16 @@
     "name": "tickx/backend-challenge",
     "type": "template",
     "require": {
-        "symfony/console": "*"
+        "symfony/console": "*",
+        "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
     },
     "autoload": {
         "psr-4": {
-            "TickX\\Challenge\\": "src/code/"
+            "TickX\\Challenge\\": "src/code/",
+            "Character\\": "src/Domains/characters/"
         }
     },
     "prefer-stable": true,

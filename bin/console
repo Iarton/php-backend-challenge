@@ -5,9 +5,11 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 use TickX\Challenge\Command\RunCommand;
+use TickX\Challenge\Command\createCharactersCommand;
 
 $application = new Application();
 
 $application->add(new RunCommand());
+$application->add(new createCharactersCommand());
 
 $application->run();
