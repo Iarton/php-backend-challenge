@@ -4,14 +4,20 @@ namespace Helper;
 
 class RequestHelper
 {
+    private $client;
+
+    public function __construct()
+    {
+        $this->client = new \GuzzleHttp\Client();
+    }
+
     public function sendRepositoryRequest(string $query, string $operation = null): array
     {
         $json = ['query' => $query];
         if ($operation != null) {
             $json[] = ["operationName" => $operation];
         }
-        $client = new \GuzzleHttp\Client();
-        $response =  $client->post($_ENV['API_URL'], [
+        $response =  $this->client->post($_ENV['API_URL'], [
             'headers' => [
                 'x-hasura-admin-secret' => $_ENV['API_SECRET'],
                 'content-type' => 'application/json'
@@ -24,8 +30,7 @@ class RequestHelper
 
     public function sendGetRequest(string $url): array
     {
-        $client = new \GuzzleHttp\Client();
-        $response =  $client->get($url);
+        $response = $this->client->get($url);
         return json_decode($response->getBody(), true);
     }
 }

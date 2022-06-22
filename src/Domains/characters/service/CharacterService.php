@@ -8,19 +8,25 @@ use Helper\RequestHelper;
 include_once  __DIR__ . '/../../../helper/RequestHelper.php';
 class CharacterService
 {
+    private $characterRepository;
+    private $request;
+
+    public function __construct()
+    {
+        $this->request = new RequestHelper();
+        $this->characterRepository = new CharacterRepository();
+    }
+
     public function create(): string
     {
         $url = 'https://thronesapi.com/api/v2/Characters';
-        $request = new RequestHelper();
-        $data = $request->sendGetRequest($url);
+        $data = $this->request->sendGetRequest($url);
 
         foreach ($data as $item) {
             $character['name'] = $item['fullName'];
             $character['image_url'] = $item['imageUrl'];
             $slug = $item['firstName'] != "" ? strtolower($item['firstName']) : strtolower($item['lastName']);
-
-            $characterRepository = new CharacterRepository();
-            $id = $characterRepository->createCharacter($character);
+            $id = $this->characterRepository->createCharacter($character);
             $this->addQuote($id, $slug);
         }
 
@@ -31,33 +37,26 @@ class CharacterService
     {
 
         $url = 'https://api.gameofthronesquotes.xyz/v1/character/' . $name;
-        $request = new RequestHelper();
-
-        $quotes = $request->sendGetRequest($url);
+        $quotes = $this->request->sendGetRequest($url);
         if ($quotes != null) {
             $quotesList = $quotes[0]['quotes'];
             foreach ($quotesList as $quote) {
-                $characterRepository = new CharacterRepository();
-                $characterRepository->addQuote($characterId, $quote);
+                $this->characterRepository->addQuote($characterId, $quote);
             }
         }
     }
 
 
-    public function getAll()
+    public function getAll(): string
     {
-
-        $characterRepository = new CharacterRepository();
-        $characterRepository->getAll();
-
+        $this->characterRepository->getAll();
 
         return 'all';
     }
 
     public function deleteAll(): string
     {
-        $characterRepository = new CharacterRepository();
-        $characterRepository->deleteAll();
+        $this->characterRepository->deleteAll();
 
         return 'deleted';
     }
