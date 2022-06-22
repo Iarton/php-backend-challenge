@@ -3,14 +3,17 @@
 namespace Character\service;
 
 use Character\repository\CharacterRepository;
+use Helper\RequestHelper;
 
+include_once  __DIR__ . '/../../../helper/RequestHelper.php';
 class CharacterService
 {
     public function create(): string
     {
-        $client = new \GuzzleHttp\Client();
-        $response =  $client->get('https://thronesapi.com/api/v2/Characters');
-        $data = json_decode($response->getBody(), true);
+        $url = 'https://thronesapi.com/api/v2/Characters';
+        $request = new RequestHelper();
+        $data = $request->sendGetRequest($url);
+
         foreach ($data as $item) {
             $character['name'] = $item['fullName'];
             $character['image_url'] = $item['imageUrl'];
@@ -27,9 +30,10 @@ class CharacterService
     public function addQuote(int $characterId, string $name): void
     {
 
-        $client = new \GuzzleHttp\Client();
-        $quotesResponse =  $client->get('https://api.gameofthronesquotes.xyz/v1/character/' . $name);
-        $quotes = json_decode($quotesResponse->getBody(), true);
+        $url = 'https://api.gameofthronesquotes.xyz/v1/character/' . $name;
+        $request = new RequestHelper();
+
+        $quotes = $request->sendGetRequest($url);
         if ($quotes != null) {
             $quotesList = $quotes[0]['quotes'];
             foreach ($quotesList as $quote) {
@@ -47,7 +51,7 @@ class CharacterService
         $characterRepository->getAll();
 
 
-        return 'fim';
+        return 'all';
     }
 
     public function deleteAll(): string

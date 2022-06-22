@@ -21,4 +21,11 @@ class RequestHelper
 
         return json_decode($response->getBody(), true);
     }
+
+    public function sendGetRequest(string $url): array
+    {
+        $client = new \GuzzleHttp\Client();
+        $response =  $client->get($url);
+        return json_decode($response->getBody(), true);
+    }
 }
